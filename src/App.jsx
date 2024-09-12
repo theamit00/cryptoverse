@@ -1,12 +1,41 @@
-import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './App.css';
+import Layout from './Layout';
+import { CryptoCurrencies, CryptoDetails, Exchanges, Homepage, News } from './pages';
 
-function App() {
- 
+const router = createBrowserRouter([
+  {
+    path : "/",
+    element : <Layout/>,
+    children : [
+      {
+        path: "/",
+        element : <Homepage/>
+      },
+      {
+        path: '/cryptocurrencies',
+        element : <CryptoCurrencies/>,
+      },
+      {
+        path: '/crypto/:coinId',
+        element : <CryptoDetails/>
+      },
+      {
+        path: '/exchanges',
+        element : <Exchanges/>
+      },
+      {
+        path : '/news',
+        element : <News/>
+      }
+    ]
+  }
+])
+
+function App() { 
 
   return (
-    <>
-      <h1>Hello there</h1>
-    </>
+    <RouterProvider router={router} />
   )
 }
 
