@@ -8,26 +8,20 @@ import News from './News';
 
 const { Title } = Typography;
 
+
+const customMillify = (data)=>{
+  if(!data) return 0;
+
+  return millify(data);
+}
+
+
 const Homepage = () => {
 
   const {data, isFetching, error} = useGetCryptosQuery();
-  const [globalStats,setGlobalStats] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (data?.data?.coins) {
-      setGlobalStats(data.data.stats);
-    }
-  }, [data]);
+  const globalStats = data?.data?.stats;
 
   if(isFetching) return 'Loading...';
-
-
-  const customMillify = (data)=>{
-    if(!data) return 0;
-
-    return millify(data);
-  }
 
   return (
     <>

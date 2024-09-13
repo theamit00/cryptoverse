@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useGetCryptosQuery } from "../services/cryptoApi";
-import { Card, Col, Input, Row } from "antd";
+import { Card, Col, Input, Row, Spin } from "antd";
 import millify from "millify";
 import { Link } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
 
 let count=0;
 
 const CryptoCurrencies = ({simplified}) => {
   const limit = simplified ? 10 : 100;  // limit of getting cryptos
   const { data: cryptoList, isFetching} = useGetCryptosQuery(limit);
+
   const [cryptos, setCryptos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (cryptoList && cryptoList.data && cryptoList.data.coins) {
-      const {coins} = cryptoList.data;
-      const filteredCryptoList = coins.filter((coin)=>(coin.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())));
+    const filterCryptos = () => {
+      const coins = cryptoList?.data?.coins || [];
+      return coins.filter(coin =>
+        coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    };
 
-      setCryptos(filteredCryptoList);
+    if (cryptoList) {
+      setCryptos(filterCryptos());
     }
   }, [cryptoList, searchTerm]);
 
-  if(isFetching) return "Loading...";
+  if(isFetching) return <div className="loading"><Spin indicator={ <LoadingOutlined style={{fontSize: 48, }} spin/> }/></div>;;
 
   return (
     <>
